@@ -127,11 +127,11 @@ public abstract class AbstractStringConstraintsSource implements ConstraintsSour
      */
     public void defineConstraints(ExplicitLayout layout, String variant)
                                 throws InvalidConstraintsException {
-        Enumeration enum = layout.getNamedConstraints();
+        Enumeration _enum = layout.getNamedConstraints();
         ExplicitConstraints constraints, cacheConstraints;
         String name, aname, value;
-        while (enum.hasMoreElements()) {
-            constraints = (ExplicitConstraints)enum.nextElement();
+        while (_enum.hasMoreElements()) {
+            constraints = (ExplicitConstraints)_enum.nextElement();
             name = (variant == null)
                    ? constraints.getName()
                    : constraints.getName() + "." + variant;

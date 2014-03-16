@@ -288,9 +288,9 @@ public class ExplicitLayout implements LayoutManager2, Serializable {
             if (preferredSize != null) {
                 preferredSize.invalidate();
             }
-            Enumeration enum = component2constraints.elements();
-            while (enum.hasMoreElements()) {
-                ((ExplicitConstraints)enum.nextElement()).invalidate();
+            Enumeration _enum = component2constraints.elements();
+            while (_enum.hasMoreElements()) {
+                ((ExplicitConstraints)_enum.nextElement()).invalidate();
             }
         }
     }
