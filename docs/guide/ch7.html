@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//EN" "hmpro4.dtd">
+
+<HTML>
+
+  <HEAD>
+    <TITLE>ExplicitLayout Programmer's Guide - Chapter 7</TITLE>
+    <LINK REL="STYLESHEET" TYPE="text/css" HREF="guide.css" TITLE="Style">
+  </HEAD>
+
+  <BODY>
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="30%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="ch6.html">Previous</A>]
+        [<A HREF="ch8.html">Next</A>]
+        </TD>
+        <TD align="center"></TD>
+        <TD WIDTH="30%" ALIGN=RIGHT VALIGN=TOP><EM><B>ExplicitLayout<BR>3.0</B></EM></TD>
+      </TR>
+    </TABLE>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+    <H1>Specifying Constraints Attributes</H1>
+    <DIV class="indent1"><UL>
+      <LI><A HREF="#purpose">ExplicitConstraints attributes</A></LI>
+      <LI><A HREF="#defaults">The ExplicitContstraints defaults</A></LI>
+      <LI><A HREF="#different">Specifying different ExplicitConstraints defaults</A></LI>
+      <LI><A HREF="#methods">Using separate methods to specify defaults</A></LI>
+      <LI><A HREF="#expressions">Using pre-defined expressions</A></LI>
+    </UL></DIV>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+    <A NAME="purpose"></A>
+    <H2>ExplicitConstraints attributes</H2>
+
+    <P>An ExplicitConstraints object has 8 attributes that affect the component
+      layout:</P>
+    <DIV class="indent1"><UL>
+      <LI>x</LI>
+      <LI>y</LI>
+      <LI>width</LI>
+      <LI>height</LI>
+      <LI>originX</LI>
+      <LI>originY</LI>
+      <LI>widthZeroIfInvisible</LI>
+      <LI>heightZeroIfInvisible</LI>
+    </UL></DIV>
+
+    <P>This section describes features and techniques that make it unnecessary to
+       specify all these attributes for every constraints object.
+    </P>
+
+    <A NAME="defaults"></A>
+    <H2>The ExplicitContstraints defaults</H2>
+
+    <P>When an ExplicitConstraints object is created using the constructor:</P>
+    <P class="codequote"><code>ExplicitConstraints(Component component)</CODE></P>
+    <P>each attribute is assigned a default value as follows:</P>
+    <DIV class="indent1">
+     <TABLE WIDTH="500" CELLPADDING=2 CELLSPACING=2 BORDER=2>
+      <TR>
+        <TD BGCOLOR="#9999FF" WIDTH="30%"><B>Attribute</B></TD>
+        <TD BGCOLOR="#9999FF" WIDTH="70%"><B>Default Value</B></TD>
+      </TR>
+      <TR>
+        <TD WIDTH="30%">x</TD>
+        <TD WIDTH="70%">ContainerEF.left()</TD>
+      </TR>
+      <TR>
+        <TD WIDTH="30%">y</TD>
+        <TD WIDTH="70%">ContainerEF.top()</TD>
+      </TR>
+      <TR>
+        <TD WIDTH="30%">width</TD>
+        <TD WIDTH="70%">ComponentEF.preferredWidth(component)</TD>
+      </TR>
+      <TR>
+        <TD WIDTH="30%">height</TD>
+        <TD WIDTH="70%">ComponentEF.preferredHeight(component)</TD>
+      </TR>
+      <TR>
+        <TD WIDTH="30%">originX</TD>
+        <TD WIDTH="70%">ExplicitConstraints.LEFT</TD>
+      </TR>
+      <TR>
+        <TD WIDTH="30%">originY</TD>
+        <TD WIDTH="70%">ExplicitConstraints.TOP</TD>
+      </TR>
+      <TR>
+        <TD WIDTH="30%">widthZeroIfInvisible</TD>
+        <TD WIDTH="70%">true</TD>
+      </TR>
+      <TR>
+        <TD WIDTH="30%">heightZeroIfInvisible</TD>
+        <TD WIDTH="70%">true</TD>
+      </TR>
+    </TABLE>
+    </DIV>
+
+
+    <A NAME="different"></A>
+    <H2>Specifying different ExplicitConstraints defaults</H2>
+    <P>Two additional constructors are provided to specify and use different defaults:</P>
+    <P class="codequote"><CODE>
+    ExplicitConstraints();<BR>
+    ExplicitConstraints(Component&nbsp;component, ExplicitConstraints&nbsp;defaultConstraints);</CODE></P>
+    <P>First, an ExplicitConstraints object is created to contain the new defaults
+    using the no-args constructor. The initial values of the attributes are as specified
+    in the previous section. The attribute values are changed as required using the set methods.
+    In order to override the defaults, this new default ExplicitConstraints object is passed
+    into subsequent constructor calls.</P>
+
+    <P>
+    The following code illustrates this by specifying the container width as the default width
+    instead of the component's preferred size and specifying the left coordinate of the container
+    as the default x coordinate. Two buttons are added using the new defaults:</P>
+
+    <P class="codequote"><CODE>
+    ExplicitConstraints defaultConstraints = new&nbsp;ExplicitConstraints();<BR>
+    defaultConstraints.setX(ContainerEF.left());<BR>
+    defaultConstraints.setWidth(ContainerEF.width());<BR>
+    <BR>
+    ExplicitConstaints ec;<BR>
+    <BR>
+    ec = new ExplicitConstraints(button1, defaultConstraints);<BR>
+    ec.setY(ContainerEF.top());<BR>
+    add(button1, ec);<BR>
+    <BR>
+    ec = new ExplicitConstraints(button2, defaultConstraints);<BR>
+    ec.setY(ComponentEF.bottom(button1));<BR>
+    add(button2, ec);<BR>
+
+    </CODE></P>
+
+    <A NAME="methods"></A>
+    <H2>Using separate methods to specify defaults</H2>
+    <P>For many layouts, similar constraints are applied to different components.
+    In some cases, a cleaner implementation can be achieved by breaking the code up into
+    separate methods. Default constraint attributes can be set in a separate method
+    rather than using the built-in mechanism described in the previous section.</P>
+
+    <P>The following code implements the same layout as the previous section using a separate
+    method to create the constraints objects:</P>
+    <P class="codequote"><CODE>
+    add(button1, createConstraints(button1, ContainerEF.top()));<BR>
+    add(button2, createConstraints(button2, ComponentEF.bottom(button1));<BR>
+    <BR>
+    <BR>
+    public ExplicitConstraints createConstraints(Component&nbsp;comp, Expression&nbsp;y) {<BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;ExplicitConstraints ec = new ExplicitConstraints(comp);<BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;ec.setX(ContainerEF.left());<BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;ec.setWidth(ContainerEF.width());<BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;ec.setY(y);<BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;return ec;<BR>
+    }<BR>
+    </CODE></P>
+
+    <A NAME="expressions"></A>
+    <H2>Using pre-defined expressions</H2>
+    <P>
+    Since ExplicitLayout 2.0, a constructor that takes all attributes is available
+    in the ExplicitConstraints class. This
+    enables adding components using a single (although sometime long) line of code.
+    If a particular expression is used in two or more different constraints, it may be
+    a good idea to define it as a separate variable and just use the variable when
+    constructing the ExplicitConstraints.</P>
+
+    <P>Suppose there is a group of label components called 'labels' and you want to locate
+    all fields 10 pixels to the right of the labels. You could define an expression to be used
+    for each fields x expression:</P>
+
+    <P class="codequote">
+    <code>Expression fieldX = GroupEF.right(labels).add(10);</code>
+    </P>
+    <P>Then you could add each field using code such as:</P>
+    <P class="codequote">
+    <code>add(field1, new ExplicitConstraints(field1, fieldX, ComponentEF.top(label1),
+    null, null, 0.0, 0.0, true, true);<BR>
+    add(field2, new ExplicitConstraints(field2, fieldX, ComponentEF.top(label2),
+    null, null, 0.0, 0.0, true, true);</code>
+    </P>
+
+    <P>&nbsp</P>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="35%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="ch6.html">Previous</A>]
+        [<A HREF="ch8.html">Next</A>]
+
+        </TD>
+        <TD WIDTH="65%" ALIGN=RIGHT VALIGN=TOP>Copyright&nbsp;&copy;&nbsp;2001 Zooki&nbsp;Technologies. All&nbsp;rights&nbsp;reserved.</TD>
+      </TR>
+    </TABLE>
+  </BODY>
+</HTML>

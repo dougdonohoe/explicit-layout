@@ -1,0 +1,97 @@
+<html>
+<head>
+  <title>ExplicitLayout Programmer's Guide - Chapter 9</title>
+  <link rel="STYLESHEET" type="text/css" href="guide.css" title="Style">
+</head>
+ <body>
+
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="30%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="ch8.html">Previous</A>]
+        [<FONT COLOR="#C0C0C0">Next</FONT>]
+        </TD>
+        <TD align="center"></TD>
+        <TD WIDTH="30%" ALIGN=RIGHT VALIGN=TOP><EM><B>ExplicitLayout<BR>3.0</B></EM></TD>
+      </TR>
+    </TABLE>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+    <H1>Troubleshooting</H1>
+    <DIV class="indent1"><UL>
+    <LI><A href="#compiler">Compiler errors</A></LI>
+    <LI><A href="#runtime">Runtime exceptions</A></LI>
+    </UL></DIV>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+    <A name="compiler"></A>
+    <H2>Compiler Errors</H2>
+    <P>This section contains a compiler error that you may get when you first try to use ExplicitLayout.</P>
+
+    <P><B>package com.zookitec.layout does not exist</B><BR>
+    This probably means that the file, exlplicit.jar, is not in the classpath.</P>
+
+
+    <A name="runtime"></A>
+    <H2>Runtime Exceptions</H2>
+    <P>This section contains some common runtime exceptions resulting from incorrect use of ExplicitLayout.
+
+    <P><B>java.lang.IllegalArgumentException: component does not match component specified in the constraints</B><BR>
+    This is thrown by ExplicitLayout.addLayoutComponent when the component specified in the
+    ExplicitConstraints object is null or different to the component being added. The ExplicitConstraints
+    class only allows the component to be null when creating default constraints using the no-args constructor.</P>
+
+    <P><B>java.lang.NullPointerException: component cannot be null</B><BR>
+    This is thrown by the ExplicitConstraints constructor if the specified component is null.</P>
+
+    <P><B>java.lang.IllegalStateException</B><BR>
+    <P>This is usually thrown if it has been detected that a constraints attribute
+    is defined in terms of itself. This would cause infinite recursion and eventually
+    a StackOverflowError if it wasn't detected.
+    For example, this problem occurs if you define the y coordinate of
+    a component using an expression for the top of the same component using
+    the following code:</P>
+    <P class="codequote"><CODE>
+    ExplicitConstraints ec = new ExplicitConstraints(c);<BR>
+    ec.setX(ComponentEF.top(c));
+    </CODE></P>
+    <P>In simple cases like this, it can be fairly easy to spot the problem. However,
+    the problem can be more difficult to spot if the dependency involves several components.
+    For example, consider components A, B and C. B is located at the bottom of A and C at the
+    bottom of B. If you also try to locate A below C you will obviously have a problem.</P>
+    <P>It is sometimes a good idea to build up a layout by adding one or a few components at a
+    time and test after each addition; then the cause of the problem can be narrowed down
+    immediately to just a few constraints objects.</P>
+
+    <P>Another, less obvious dependency is that of x and y coordinates on the
+    width and height if the originX or originY is not zero.
+    For example, if originX = 0.5,
+    the x expression defines the center of the component; the component width
+    is required to calculate the left x coordinate from the center x coordinate.
+    Check that the width expression is not dependent on the component's
+    x coordinate and that the height expression is not dependent on the y coordinate.
+    You can, however, define the width or height in terms of the x and y expression
+    when originX or originY is not zero. </P>
+
+    <P>&nbsp;</P>
+
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="35%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="ch8.html">Previous</A>]
+        [<FONT COLOR="#C0C0C0">Next</FONT>]
+        </TD>
+         <TD WIDTH="65%" ALIGN=RIGHT VALIGN=TOP>Copyright&nbsp;&copy;&nbsp;2001 Zooki&nbsp;Technologies. All&nbsp;rights&nbsp;reserved.</TD>
+      </TR>
+    </TABLE>
+
+
+</body>
+</html>

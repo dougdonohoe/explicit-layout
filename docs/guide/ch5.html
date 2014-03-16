@@ -1,0 +1,162 @@
+<HTML>
+<HEAD>
+  <TITLE>ExplicitLayout Programmer's Guide - Chapter 5</TITLE>
+  <LINK rel="STYLESHEET" type="text/css" href="guide.css" title="Style">
+</HEAD>
+<BODY>
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="30%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="ch4.html">Previous</A>]
+        [<A HREF="ch6.html">Next</A>]
+        </TD>
+        <TD align="center"></TD>
+        <TD WIDTH="30%" ALIGN=RIGHT VALIGN=TOP><EM><B>ExplicitLayout<BR>3.0</B></EM></TD>
+      </TR>
+    </TABLE>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+    <H1>Specifying a component's size</H1>
+    <P>A component's size is specified using expressions for the width and height in an
+    ExplicitConstraints object. This section describes various ways to create these width and height expressions.
+    <DIV class="indent1"><UL>
+      <LI><A href="#component">Specifying a size based on the component size hints</A></LI>
+      <LI><A href="#fixed">Specifying an absolute size</A></LI>
+      <LI><A href="#container">Specifying a size based on the container</A></LI>
+      <LI><A href="#group">Specifying a size based on a group of components</A></LI>
+      <LI><A href="#grid">Specifying a size based on a grid</A></LI>
+      <LI><A href="#invisible">Specifying behaviour when a component is invisible</A></LI>
+    </UL></DIV>
+
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+
+    <A name="component"></A>
+    <H2>Specifying a size based on the component size hints</H2>
+    <P>Components typically define size hints in the form of a preferred, minimum and maximum size.
+    Some layout managers use these size hints to influence the layout; others ignore them completely.
+    The ComponentEF class has methods that create expressions for the preferred, minimum and maximum
+    width and height of a component. You may use these expressions to specify a layout that respects
+    the component's size hints.</P>
+
+    <P>If you do not specify expressions for the width and height, the default behaviour is to use the
+    component's preferred size.</P>
+
+    <P>The following code creates a constraints object to layout a component using its minimum size.</P>
+    <P class="codequote"><CODE>
+    ExplicitConstraints ec = new ExplicitConstraints(c);<BR>
+    ec.setWidth(ComponentEF.minimumWidth());<BR>
+    ec.setHeight(ComponentEF.minimumHeight());<BR>
+    </CODE></P>
+
+
+    <A name="fixed"></A>
+    <H2>Specifying an absolute size</H2>
+    <P>An ExplicitConstraints object contains Expressions not literals. To specify an absolute size, you must
+    create a constant expression using the MathEF.constant method.
+    The following code create a constraints object
+    to set an image component's size to 100 pixels wide by 50 pixels high:</P>
+    <P class="codequote"><CODE>
+    ExplicitConstraints ec = new ExplicitConstraints(image);<BR>
+    ec.setWidth(MathEF.constant(100));<BR>
+    ec.setHeight(MathEF.constant(50));<BR>
+    </CODE></P>
+
+
+
+
+    <A name="container"></A>
+    <H2>Specifying a size based on the container</H2>
+    <P>A component's size can be defined in terms of the container's size or a fraction of the container's size.
+    The ContainerEF class contains methods for the width, width fraction, height and height fraction of the container.</P>
+
+    <P>The following code creates a constraints object to set the component's width to half the container width
+    and the component's height to the height of the container. In the code below, "this" 
+    is a reference to the container being layed out.</P>
+    <P class="codequote"><CODE>
+    ExplicitConstraints ec = new ExplicitConstraints(c);<BR>
+    ec.setWidth(ContainerEF.widthFraction(this, 0.5));<BR>
+    ec.setHeight(ContainerEF.height(this));<BR>
+    </CODE></P>
+
+
+
+    <A name="group"></A>
+    <H2>Specifying a size based on a group of components</H2>
+    <P>The <CODE>GroupEF.createExpressions(ComponentExpression expr, Component [] components)</CODE> method can be
+    used to create an array of expressions for a group of components. Each expression is similar to the specified
+    component expression but applied to each component in the array. This can be used along with the
+    <CODE>MathEF.max(Expression [] operands)</CODE>, <CODE>MathEF.min(Expression [] operands)</CODE> and
+    <CODE>MathEF.sum(Expression [] operands)</CODE>.</P>
+
+    <P>The following code creates a constraints object to set the width of a component to the maximum preferred width
+    of the components in a group. This could be used to ensure all components in the group have the same width
+    and all are at least their preferred width</P>
+    <P class="codequote"><CODE>
+    Component [] group = {label1, label2, label3, label4};
+    ExplicitConstraints ec = new ExplicitConstraints(label1);<BR>
+    ec.setWidth(MathEF.max(GroupEF.createExpressions(ComponentEF.preferredWidth(null), group));<BR>
+    </CODE></P>
+
+    <A name="grid"></A>
+    <H2>Specifying a size based on a grid</H2>
+    <P>In the section, <A href="ch4.html#grid">Specifying a location on a grid</A>, the ContainerEF gridX and
+    gridY expressions were used to create expressions for the grid cell coordinates. These methods take
+    expressions for the cell width and cell height as a parameter. To locate and size a component based on a
+    grid, you can define expressions for the cell width and cell height and pass them into the
+    corresponding gridX and gridY methods and use them to set the width and height. You can also specify that
+    the width or height is a multiple of the grid cell width or height.</P>
+
+    <P>The following code creates a constraints object to locate the component at grid cell 1,2 and set its
+    size to 3 cells wide by 1 cell high. The cell width and height are defined as fractions
+    of the container width and height in order to layout the component on a 6 x 4 grid
+    that fills the container.</P>
+    <P class="codequote"><CODE>
+    Expression cellWidth = ContainerEF.widthFraction(1/6.0);<BR>
+    Expression cellHeight = ContainerEF.heightFraction(1/4.0);<BR>
+    ExplicitConstraints ec = new ExplicitConstraints(c);<BR>
+    ec.setX(ContainerEF.gridX(1, cellWidth));<BR>
+    ec.setY(ContainerEF.gridY(2, cellHeight));<BR>
+    ec.setWidth(MathEF.multiply(cellWidth, 3));<BR>
+    ec.setHeight(cellHeight);<BR>
+    </CODE></P>
+
+
+    <A name="invisible"></A>
+    <H2>Specifying behaviour when a component is invisible</H2>
+    <P>Sometimes components are made invisible at runtime, for example, to hide
+    functionality not currently available. When a component is made invisible,
+    either the layout does not change or the remaining visible components shuffle
+    around or resize to fill the empty space previously occupied by the invisible
+    component. The ExplicitConstraints class contains two methods,</P>
+    <P class="codequote">
+    <CODE>setWidthZeroIfInvisible(boolean flag)</CODE> and<BR>
+    <CODE>setHeightZeroIfInvisible(boolean flag)</CODE>,</P>
+    <P>that help  determine the
+    way in which the layout adapts to an invisible component. These flags can be
+    set differently for each component. If the flag is true, the width or height is set to zero
+    when the component is made invisible regardless of
+    the value of the width or height expressions. Any component whose location
+    or size depends on the invisible component is then moved or resized accordingly.
+    If the flag is false, there is no change to the layout when the component is made invisible.</P>
+
+    <P>&nbsp</P>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="35%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="ch4.html">Previous</A>]
+        [<A HREF="ch6.html">Next</A>]
+        </TD>
+        <TD WIDTH="65%" ALIGN=RIGHT VALIGN=TOP>Copyright&nbsp;&copy;&nbsp;2001 Zooki&nbsp;Technologies. All&nbsp;rights&nbsp;reserved.</TD>
+      </TR>
+    </TABLE>
+</BODY>
+</HEAD>

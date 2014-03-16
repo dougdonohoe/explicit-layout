@@ -1,0 +1,134 @@
+<html>
+<head>
+  <title>ExplicitLayout Programmer's Guide - Chapter 8</title>
+  <link rel="STYLESHEET" type="text/css" href="guide.css" title="Style">
+</head>
+<body>
+
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="30%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="ch7.html">Previous</A>]
+        [<A HREF="ch9.html">Next</A>]
+        </TD>
+        <TD align="center"></TD>
+        <TD WIDTH="30%" ALIGN=RIGHT VALIGN=TOP><EM><B>ExplicitLayout<BR>3.0</B></EM></TD>
+      </TR>
+    </TABLE>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+    <H1>Adding functionality to ExplicitLayout</H1>
+
+    <DIV class="indent1"><UL>
+      <LI><A href="#expressions">New expressions</A></LI>
+      <LI><A href="#constraints">Constraints factories</A></LI>
+      <LI><A href="#suggest">Suggest features for a future version</A></LI>
+    </UL>
+    </DIV>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+    <A name="expressions"></A>
+    <H2>New expressions</H2>
+    <P>ExplicitLayout enables a wide range of layouts to be specified. However, suppose
+    that you find some aspect of your user interface layout is not catered for. ExplicitLayout enables
+    a component to be placed anywhere and at any size using expressions for x, y, width and height.
+    If you find that none of the expressions created by the expression factories satisfy your
+    requirements, you can easily define your own expressions by creating subclasses of Expression or
+    one of its subclasses. The public expression classes are described in table 8.1.</P>
+
+    <DIV class="indent1">
+    <TABLE WIDTH=550 CELLPADDING=2 CELLSPACING=2 BORDER=2>
+    <TR>
+    <TH BGCOLOR="#9999FF" WIDTH="30%" ALIGN="LEFT"><B>Class</B></TH>
+    <TH BGCOLOR="#9999FF" WIDTH="70%" ALIGN="LEFT"><B>Description</B></TH>
+    </TR>
+    <TR VALIGN="TOP">
+    <TD WIDTH="20%">Expression</TD>
+    <TD WIDTH="80%">The superclass of all expressions.</TD>
+    </TR>
+    <TR VALIGN="TOP">
+    <TD WIDTH="20%">BinaryExpression</TD>
+    <TD WIDTH="80%">An expression whose value is calculated from two operand expressions.</TD>
+    </TR>
+    <TR VALIGN="TOP">
+    <TD WIDTH="20%">MultiExpression</TD>
+    <TD WIDTH="80%">An expression whose value is calculated from one or more operand expressions.</TD>
+    </TR>
+    <TR VALIGN="TOP">
+    <TD WIDTH="20%">ComponentExpression</TD>
+    <TD WIDTH="80%">An expression whose value depends on the attributes of a component.</TD>
+    </TR>
+    </TABLE>
+    Table 8.1 :  Public expression classes
+    </DIV>
+
+    <P>Subclasses should override the computeValue method to provide a variable value for the
+    expression. Please see the API documentation for further details of these classes.</P>
+
+    <A name="constraints"></A>
+    <H2>Constraints factories</H2>
+    <P>A constraints factory is a class that contains static methods for creating constraints
+    objects. ExplicitLayout does not currently provide any constraints factories. However, depending
+    on your own layout needs, you may find it useful to create constraints factory methods to create
+    commonly used constraints.</P>
+
+    <P>For example, suppose you need to define several layouts that center a component within a
+    container at the smaller of its preferred size and the container size. The following code
+    implements a method in a constraints factory to do just that:</P>
+
+    <DIV class="codequote"><CODE>
+    public class MyCF {<BR>
+    <BR>
+    public static ExplicitConstraints createCenterConstraints(Component c) {<BR>
+    </CODE></DIV>
+    <DIV class="codequote2"><CODE>
+        ExplicitConstraints ec = new ExplicitConstraints(c);<BR>
+        ec.setOriginX(ExplicitConstraints.CENTER);<BR>
+        ec.setOriginY(ExplicitConstraints.CENTER);<BR>
+        ec.setX(ContainerEF.xFraction(0.5));<BR>
+        ec.setY(ContainerEF.yFraction(0.5));<BR>
+        ec.setWidth(MathEF.min(ComponentEF.preferredWidth(c), ContainerEF.width()));<BR>
+        ec.setHeight(MathEF.min(ComponentEF.preferredHeight(c), ContainerEF.height()));<BR>
+        return ec;<BR>
+    </CODE></DIV>
+    <DIV class="codequote"><CODE>
+        }<BR>
+        }<BR>
+    </CODE></DIV>
+
+    <P>
+    Instead of implementing all those lines of code every time you need this type of layout,
+    you now only have to implement the following line.
+    </P>
+    <DIV class="codequote"><CODE>
+    add(c, MyCF.createCenterConstraints(c));
+    </CODE></DIV>
+    <P>If you like the idea of constraints factories and would like to see them in a future version,
+    please give us some feedback about what features you require. See link below.
+
+    <A name="suggest"></A>
+    <H2>Suggest features for a future version</H2>
+    <P>Another way to add functionality with less effort is to send us your ideas for new features or enhancements.<BR>
+     To contact us, see <A HREF="ch1.html#support">feedback</A>.</P>
+
+    <P>&nbsp</P>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="35%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="ch7.html">Previous</A>]
+        [<A HREF="ch9.html">Next</A>]
+
+        </TD>
+        <TD WIDTH="65%" ALIGN=RIGHT VALIGN=TOP>Copyright&nbsp;&copy;&nbsp;2001 Zooki&nbsp;Technologies. All&nbsp;rights&nbsp;reserved.</TD>
+      </TR>
+    </TABLE>
+
+
+</body>
+</html>

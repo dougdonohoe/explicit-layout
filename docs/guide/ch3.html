@@ -1,0 +1,184 @@
+<HTML>
+<HEAD>
+  <TITLE>ExplicitLayout Programmer's Guide - Chapter 3</TITLE>
+  <LINK rel="STYLESHEET" type="text/css" href="guide.css" title="Style">
+</HEAD>
+<BODY>
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="30%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="ch2.html">Previous</A>]
+        [<A HREF="ch4.html">Next</A>]
+        <TD align="center"></TD>
+        </TD>
+        <TD WIDTH="30%" ALIGN=RIGHT VALIGN=TOP><EM><B>ExplicitLayout<BR>3.0</B></EM></TD>
+      </TR>
+    </TABLE>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+    <H1>Getting Started with ExplicitLayout</H1>
+    <P>This section is an introduction to using ExplicitLayout to layout AWT,
+    Swing or JavaBean components. Sufficient information is provided to get started
+     without going into too much detail straight away. The three fundamental
+    classes:  ExplicitLayout, ExplicitConstraints and Expression are introduced
+    and used to demonstrate how to define the location of a component within its
+    container.<BR>
+    </P>
+    <DIV class="indent1"><UL>
+      <LI><A href="#import">Importing the ExplicitLayout package</A></LI>
+      <LI><A href="#setLayout">Setting the layout manager for the container</A></LI>
+      <LI><A href="#add">Adding components to the container</A></LI>
+      <LI><A href="#location">Specifying a component's location</A></LI>
+      <LI><A href="#factories">Expression Factories</A></LI>
+    </UL></DIV>
+    <IMG src="images/bar.gif" alt=" " width="100%" height="5"><BR>
+    <A name="import"></A>
+    <H2>Importing the ExplicitLayout package </H2>
+    <P>All classes that use ExplicitLayout must import the com.zookitec.layout
+    package. Add the following import statement to the class file:</P>
+    <p class="codequote"><CODE>import com.zookitec.layout.*;</CODE></P>
+    <DIV align="Center"><BR>
+    </DIV>
+    <A name="setLayout"></A>
+    <H2>Setting the layout manager for the container</H2>
+    <P>ExplicitLayout is a constraint-based layout manager that implements the
+    java.awt.LayoutManager2 interface. A layout manager is an object
+    that controls the size and positions of components in a container.
+    In order to use ExplicitLayout, a new ExplicitLayout object is created
+    and associated with the container. This is done either from outside
+    the container class by calling:</P>
+    <p class="codequote"><CODE>container.setLayout(new ExplicitLayout());</CODE></P>
+    <P>or from inside one of the container class methods or constructors by calling:</P>
+    <p class="codequote"><CODE>setLayout(new ExplicitLayout());</CODE></P>
+    <DIV align="Center"><BR>
+    </DIV>
+    <A name="add"></A>
+    <H2>Adding components to the container</H2>
+    <P>Components are added to the container in the usual way using one of the
+              container add methods that take a constraints object parameter:</P>
+    <p class="codequote"><CODE> Container.add(Component comp, Object constraints)
+                   <BR>
+                                    Container.add(Component comp, Object constraints,
+        int   index)    </CODE></P>
+    <P>The constraints object must be an instance of ExplicitConstraints. An IllegalArgumentException
+    is thrown if the constraints object is not an instance of ExplicitConstraints
+    or a component is added using a container add method that does not take a
+    constraints object.</P>
+    <P>A new ExplicitConstraints object is created for each component to be added
+              to the container. The simplest way to create an ExplicitConstraints
+        object      for some component, comp, is to use the following line of
+    code:</P>
+    <p class="codequote"><CODE>ExplicitConstraints ec = new ExplicitConstraints(comp);</CODE></P>
+    <P>By default, a new ExplicitConstraints object created in this way causes
+    ExplicitLayout to layout the component at the top left of the container,
+    using the component's preferred size. To add the component using the above
+    constraints object, use the following line  of  code:</P>
+    <p class="codequote"><CODE>add(comp, ec);</CODE></P>
+    <DIV align="Center"><BR>
+    </DIV>
+    <A name="location"></A>
+    <H2>Specifying a component's location</H2>
+    <P> The ExplicitLayout class differs from the standard layout managers in
+    that it does not have a predefined style of layout. Instead, an ExplicitConstraints
+    object defines the location and size of a component explicitly, hence
+    the name of this layout manager.</P>
+    <P>An ExplicitConstraints object contains expressions for the x and y coordinates
+    and the width and height of the component. All expressions used by
+    ExplicitLayout are represented by an instance of the Expression class.
+    An Expression object represents a constant expression and various subclasses
+    are used to represent variable expressions (e.g. a component's preferred
+    width is a variable expression). Expression factory classes are typically used to
+    create expressions.</P>
+    <P>To illustrate this, the following lines of code create an ExplicitConstraints
+    object to locate a component 10 pixels from top and left of the container, taking
+    into account the container's internal borders (insets), and using the component's preferred size.
+    The ContainerEF expression factory is used to get expressions for the top and left
+    of the container and the the Expression.add method is used to add 10 pixels:</P>
+    <p class="codequote"><CODE>ExplicitConstraints ec = new ExplicitConstraints(comp);<BR>
+                    ec.setX(ContainerEF.left().add(10));<BR>
+                    ec.setY(ContainerEF.top().add(10));<BR>
+                   add(comp, ec);<BR>
+    </CODE></P>
+
+    <P>Since ExplicitLayout 2.0, a constructor that takes all attributes is available in
+    the ExplicitConstraints class. The following code is equivalent to the code above;
+    null for width and height indicates to use the preferred size; you will be introduced to
+    the other attributes in the following sections:</P>
+    <P class="codequote"><CODE>add(comp, new ExplicitConstraints(comp,
+        ContainerEF.left().add(10), ContainerEF.top().add(10), null, null, 0.0, 0.0, true, true);<BR>
+    </CODE></P>
+
+    <A name="factories"></A>
+    <H2>Expression Factories</H2>
+    <P>The previous section gave a brief introduction to the use of expression factories.
+    There are four expression factory classes (five in the professional edition)
+    containing static methods that return Expression objects as described in table 3.1.</P>
+
+    <DIV class="indent1">
+    <TABLE WIDTH=550 CELLPADDING=2 CELLSPACING=2 BORDER=2>
+    <TR>
+    <TH BGCOLOR="#9999FF" WIDTH="30%" ALIGN="LEFT"><B>Class</B></TH>
+    <TH BGCOLOR="#9999FF" WIDTH="70%" ALIGN="LEFT"><B>Description</B></TH>
+    </TR>
+    <TR>
+    <TD WIDTH="20%">ContainerEF</TD>
+    <TD WIDTH="80%">Creates expressions for attributes of the container being laid out</TD>
+    </TR>
+    <TR>
+    <TD WIDTH="20%">ComponentEF</TD>
+    <TD WIDTH="80%">Creates expressions for attributes of a component</TD>
+    </TR>
+    <TR>
+    <TD WIDTH="20%">MathEF</TD>
+    <TD WIDTH="80%">Creates expressions for common mathematical operations</TD>
+    </TR>
+    <TR>
+    <TD WIDTH="20%">GroupEF</TD>
+    <TD WIDTH="80%">Creates expressions for attributes of a group of components</TD>
+    </TR>
+    <TR>
+    <TD WIDTH="20%">GeomEF</TD>
+    <TD WIDTH="80%">Creates expressions for points of geometric shapes. (professional)</TD>
+    </TR>
+    </TABLE>
+    Table 3.1 : ExplicitLayout Expression Factories
+    </DIV>
+    <P>There are several reasons why it is implemented this way rather than creating an
+    expression class hierarchy:</P>
+
+    <DIV class="indent1"><UL>
+    <LI>Some of the expressions are best implemented as compound expressions rather than as a separate class,
+    for example, <CODE>ContainerEF.widthFraction(double&nbsp;fraction)</CODE> is implemented using <CODE>MathEF.multiply(ContainerEF.width(),fraction)</CODE>
+    <LI>It facilitates grouping expressions by functionality</LI>
+    <LI>It provides a consistent interface to expressions regardless of implementation</LI>
+    <LI>The resulting code is more concise and more readable</LI>
+    </UL></DIV>
+    <P>
+    Please see the API documentation for further details of the expressions provided by these
+    factory classes. Various methods from these classes are used to illustrate how to use ExplicitLayout
+    in the rest of this guide.
+    </P>
+    <P>&nbsp;</P>
+
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="35%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="ch2.html">Previous</A>]
+        [<A HREF="ch4.html">Next</A>]
+
+        </TD>
+        <TD WIDTH="65%" ALIGN=RIGHT VALIGN=TOP>Copyright&nbsp;&copy;&nbsp;2001 Zooki&nbsp;Technologies. All&nbsp;rights&nbsp;reserved.</TD>
+      </TR>
+    </TABLE>
+
+
+</BODY>
+</HTML>

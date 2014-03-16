@@ -1,0 +1,94 @@
+<html>
+<head>
+  <title>ExplicitLayout Programmer's Guide - Chapter 6</title>
+  <link rel="STYLESHEET" type="text/css" href="guide.css" title="Style">
+</head>
+
+<body>
+
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="30%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="ch5.html">Previous</A>]
+        [<A HREF="ch7.html">Next</A>]
+        </TD>
+        <TD align="center"></TD>
+        <TD WIDTH="30%" ALIGN=RIGHT VALIGN=TOP><EM><B>ExplicitLayout<BR>3.0</B></EM></TD>
+      </TR>
+    </TABLE>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+    <H1>Nesting Containers</H1>
+    <DIV class="indent1"><UL>
+      <LI><A href="#why">Why nest containers?</A></LI>
+      <LI><A href="#hints">Container size hints</A></LI>
+
+    </UL></DIV>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+    <A name="why"></A>
+    <H2>Why nest containers?</H2>
+    <P>With less capable layout managers, it is sometimes necessary to nest containers
+    to achieve a desired layout. Nesting containers involves grouping
+    components into invisible containers, possibly using a different layout manager
+    for each container and adding each container, rather than the individual
+    components, to the main container. The need to nest containers for this reason
+    is reduced when using ExplicitLayout because it provides more flexible control
+    over the layout.</P>
+
+    <P>However, there are many other reasons why you may want to group components in a container
+    including:</P>
+    <DIV class="indent1"><UL>
+    <LI>Improving modularity or the code</LI>
+    <LI>Better object orientated design</LI>
+    <LI>Maintainability of the code</LI>
+    <LI>To make a group of components invisible</LI>
+    <LI>To add components to a scroll pane</LI>
+    </UL></DIV>
+
+    <A name="hints"></A>
+    <H2>Container size hints</H2>
+    <P>It is typical for a layout manager to define the preferred, minimum and
+    maximum size of the container based on the layout components and constraints.
+    These size hints may be used by the layout manager of the parent container
+    when nesting containers.</P>
+
+
+    <P>ExplicitLayout does not automatically define these size hints based on the
+    layout. Instead, it allows you to specify expressions for the preferred, minimum
+    and maximum sizes. These expressions can be defined by combining expressions from
+    the GroupEF, ComponentEF and MathEF expression factories. These expressions could
+    depend on some or all of the components in the container; alternatively they may
+    be set to a constant expression.
+    </P>
+
+    <P>The following code specified the preferred size of the container.
+    The preferred width is set to be the maximum preferred width of a group of components
+    plus some space. The preferred height is set to the sum of the preferred heights of
+    a group of components plus some space.</P>
+    <P class="codequote"><CODE>
+    ExplicitLayout layout = new ExplicitLayout();<BR>
+    Component [] group = {label1, label2, label3, label4};<BR>
+    Expression width = MathEF.max(GroupEF.createExpressions(ComponentEF.preferredWidth(null), group));
+    Expression height = MathEF.add(GroupEF.preferredWidth(group), (group.length&nbsp;+&nbsp;1)&nbsp;*&nbsp;5);<BR>
+    layout.setPreferredSize(width, height);<BR>
+
+    </CODE></P>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="35%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="ch5.html">Previous</A>]
+        [<A HREF="ch7.html">Next</A>]
+        </TD>
+         <TD WIDTH="65%" ALIGN=RIGHT VALIGN=TOP>Copyright&nbsp;&copy;&nbsp;2001 Zooki&nbsp;Technologies. All&nbsp;rights&nbsp;reserved.</TD>
+      </TR>
+    </TABLE>
+
+</body>
+</html>

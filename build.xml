@@ -1,0 +1,83 @@
+<project name="explicit" default="dist" basedir=".">
+
+  <property name="src" value="src"/>
+  <property name="build" value="build"/>
+  <property name="dist"  value="lib"/>
+  <property name="apidoc" value="docs/api"/>
+  <property name="version"  value="3.0"/>
+    
+  <property name="classpath"  value="${build}"/>
+
+  
+
+  
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init">
+ 
+    <echo message="classpath: ${classpath}"/>
+    <javac srcdir="${src}" destdir="${build}" classpath="${classpath}" />
+  </target>
+
+  <target name="dist" depends="compile">
+    <mkdir dir="${dist}"/>
+    <copy todir="${build}" >
+        <fileset dir="${src}" excludes="**/*.java,**/*.html"/>
+    </copy>
+    <copy todir="${build}\com\zookitec\layout\demo" >
+        <fileset dir="${src}\com\zookitec\layout\demo"/>
+    </copy>
+    <jar jarfile="${dist}/elall.jar" 
+         basedir="${build}"
+         includes="com/zookitec/layout/**"
+         excludes="com/zookitec/layout/demo/**"
+    />
+    <jar jarfile="${dist}/elcore.jar" 
+         basedir="${build}"
+         includes="com/zookitec/layout/**"
+         excludes="com/zookitec/layout/demo/**,com/zookitec/layout/styles/**,com/zookitec/layout/source/**"
+    />
+    <jar jarfile="${dist}/explicit.jar" 
+         basedir="${build}"
+         includes="com/zookitec/layout/**"
+         excludes="com/zookitec/layout/demo/**,com/zookitec/layout/source/**"
+    />
+    <jar jarfile="${dist}/eldemo.jar" 
+         basedir="${build}"
+         includes="com/zookitec/layout/demo/**"  
+         manifest="demo.mf"
+    />
+    <zip zipfile="explicit_${version}.zip" 
+         basedir="${basedir}"
+         excludes="build/**,explicit_${version}.zip"           
+    />
+  </target>
+
+  <target name="clean">
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+    <delete dir="${apidoc}"/>
+  </target>
+  
+  <target name="doc">
+      <javadoc packagenames="com.zookitec.layout,com.zookitec.layout.styles"
+               sourcepath="src"                      
+               destdir="${apidoc}"
+               overview="src/overview.html"
+               windowtitle="ExplicitLayout ${version} API Specification">
+        <doctitle><![CDATA[<h1>ExplicitLayout ${version} API Specification</h1>]]></doctitle>
+        <header><![CDATA[<b>ExplicitLayout<br>${version}</b>]]></header>
+        <bottom><![CDATA[<font size="-1"><a href="http://www.zookitec.com" target="_blank">Submit a bug or feature request</a><br><br>Copyright &copy; 2001 Zooki Technologies.<br>All Rights Reserved.</font>]]></bottom>
+        <group title="Core Package" packages="com.zookitec.layout"/>
+        <group title="Extra Packages" packages="com.zookitec.layout.styles"/>
+        <link offline="true" href="http://java.sun.com/products/jdk/1.4/docs/api/" packagelistLoc="C:\jdk1.4\docs\api"/>        
+            
+      </javadoc>
+      
+   </target>
+</project>
+

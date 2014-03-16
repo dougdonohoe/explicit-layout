@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//SoftQuad//DTD HoTMetaL PRO 4.0::19971010::extensions to HTML 4.0//EN"
+ "hmpro4.dtd">
+
+<HTML>
+
+  <HEAD>
+    <TITLE>ExplicitLayout Programmer's Guide - Chapter 1</TITLE>
+    <LINK rel="STYLESHEET" type="text/css" href="guide.css" title="Style">
+  </HEAD>
+
+  <BODY>
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="30%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="toc.html">Previous</A>]
+        [<A HREF="ch2.html">Next</A>]
+
+        </TD>
+        <TD align="center"></TD>
+        <TD WIDTH="30%" ALIGN=RIGHT VALIGN=TOP><EM><B>ExplicitLayout<BR>3.0</B></EM></TD>
+      </TR>
+    </TABLE>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+    <H1>Preface</H1>
+    <DIV class="indent1"><UL>
+      <LI><A href="#intro">Introducing ExplicitLayout</A></LI>
+      <LI><A href="#features">Features</A></LI>
+      <LI><A href="#assumptions">Assumptions</A></LI>
+      <LI><A href="#related">Related Documents</A></LI>
+      <LI><A href="#support">Technical Support and Feedback</A></LI>
+    </UL></DIV>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+    <A name="intro"></A>
+    <H2>Introducing ExplicitLayout</H2>
+
+<P>Create sophisticated, adaptable and professional user interfaces.
+ExplicitLayout is the ultimate layout manager for Java with a unique
+approach to defining resolution independent layouts for AWT, Swing
+or JavaBean components. ExplicitLayout gives the developer
+complete control over each component's resizing behaviour as the container
+size or application state changes. ExplicitLayout extends the JDK with
+a powerful, flexible, intuitive and extensible layout manager that facilitates
+the implementation of almost any component layout.</P>
+
+
+<P>
+<B>Important Note:</B>
+This document has not been fully updated for Explicit Layout v3.0 so some details may be 
+incorrect or out-of-date.
+</P>
+
+
+<A name="features"></A>
+<H2>Features</H2>
+
+<P>ExplicitLayout is a constraints based layout manager that implements the
+java.awt.LayoutManager2 interface. It can be used to layout any
+container that extends java.awt.Container.</P>
+
+<P><B>ExplicitLayout</B> provides the following features:</P>
+
+<P>Specify a component's location relative to:</P>
+<DIV class="indent1"><UL>
+<LI>An absolute position</LI>
+<LI>The edges of the container (respecting the container insets)</LI>
+<LI>A fraction of the width or height of the container</LI>
+<LI>The edges of another component</LI>
+<LI>A fraction of the width or height of another component</LI>
+<LI>The edges of a group of components</LI>
+<LI>A row and column of a grid</LI>
+<LI>and more ...</LI>
+</UL></DIV>
+
+<P>Specify the location of any point on a component, not just
+the top left corner. This facilitates aligning component's left, center, right,
+top, middle or bottom.</P>
+
+<P>Specify a component's size based on:</P>
+<DIV class="indent1"><UL>
+<LI>An absolute size</LI>
+<LI>The preferred, minimum or maximum size of a component
+or components in a group</LI>
+<LI>The size of the container (respecting the container insets)</LI>
+<LI>A fraction of the size of the container</LI>
+<LI>The size of another component or group</LI>
+<LI>A fraction of the size of another component or group</LI>
+<LI>The space between two components</LI>
+<LI>The space to the edge of the container</LI>
+<LI>A grid cell size</LI>
+<LI>and more ...</LI>
+</UL></DIV>
+
+<P>Define whether a component's width or height is set to
+zero when the component is not visible. This provides some control over whether the
+layout is rearranged to fill the space left by an invisible component.</P>
+
+<P>Modify layout constraints at runtime based on,
+for example, component visibility.</P>
+
+<P>ExplicitLayout can be used alongside other layout managers by nesting containers.
+It enables the preferred, minimum and maximum size of the container to be
+defined based on the sizes of its components.</P>
+
+<P>A LayoutListener can be notified just before layout to enable switching constraints
+based on container width / height ratio. This takes care of situations when it is difficult
+to define a single layout for a container that could be very wide and very tall.</P>
+
+<P>Specify a component's location relative to a point on an ellipse or line.
+These features improve the ability to lay out less rectangular GUI's
+(e.g. with non-rectangular, transparent or overlapping components). </P>
+
+<P>Load layout constraints from a properties file. Layout constraints can be defined in
+a properties file using Java Language strings similar to those used when defining
+the constraints in a class file. This allows layouts to be modified without recompiling
+and allows different variant layouts to be specified for a particular container.
+A different variant could be chosen depending on some state e.g. user preferences,
+user skill level, locale, or container width/height ratio. This also allows a program
+to modify its own layouts and store them in a file for use next time the program is run.
+
+<P>Load layout constraints from other sources. ExplicitLayout can
+easily be extended to load constraints from other sources,
+e.g. an XML file or a database.</P>
+
+
+<P>Use the same layout definition for different containers. This can be useful when
+otherwise unrelated containers have similar layouts but possibly different or even
+optional components.</P>
+
+
+<P>ExplicitLayout can easily be extended to support even more layout
+characteristics and maximise code reuse.</P>
+
+
+    <A name="assumptions"></A>
+    <H2>Assumptions</H2>
+
+    <P>This guide is intended for Java developers wishing to make use of
+    ExplicitLayout in their own software. It assumes you have some experience
+    with the Java programming language and have a basic understanding
+    of what layout managers are used for. See related documents for further information.</P>
+
+
+    <A name="related"></A>
+    <H2>Related documents</H2>
+
+    <P>The following documents accompany this guide:</P>
+
+    <P><A HREF="../api/index.html" TARGET="_new">ExplicitLayout API</A> -
+    The ExplicitLayout API (Javadoc) documentation</P>
+
+    <P>The following documents from Sun Microsystems provide background information about Java.</P>
+
+    <P><A HREF="http://java.sun.com/j2se/1.3/docs/index.html" TARGET="_new">Java 2 SDK documentation</A>
+    - The API specifications and developer guides for the Java 2 SDK</P>
+
+    <P><A HREF="http://java.sun.com/docs/books/tutorial/index.html" TARGET="_new">Java Tutorial</A> -
+      This guide to the Java language and APIs includes a section on layout managers.</P>
+
+
+ 
+    <P>&nbsp</P>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="35%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="toc.html">Previous</A>]
+        [<A HREF="ch2.html">Next</A>]
+
+        </TD>
+        <TD WIDTH="65%" ALIGN=RIGHT VALIGN=TOP>Copyright&nbsp;&copy;&nbsp;2001 Zooki&nbsp;Technologies. All&nbsp;rights&nbsp;reserved.</TD>
+      </TR>
+    </TABLE>
+  </BODY>
+</HTML>

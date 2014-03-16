@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD/ HTML 3.2 Final//EN">
+<HTML>
+
+  <HEAD>
+    <TITLE>Blank</TITLE>
+  </HEAD>
+
+  <BODY>
+    Demonstrates how to use <b>ExplicitLayout</b> to:
+    <UL>
+    <LI>Control the layout behaviour when a component is invisible</LI>
+    </UL>
+    <P>This example demonstrates the use of the widthZeroIfInvisible and
+    heightZeroIfInvisible flags of an ExplicitConstraints object.
+    These flags control whether the width and height of a component is
+    set to zero when the component is invisible.</P>
+
+    <P>The frame below contains buttons labelled 'One' to 'Six' and some check boxes
+    that allow you to change the visibility of some of the components. All buttons except
+    'Five' have both the widthZeroIfInvisible=true and heightZeroIfInvisible=true.
+    Button five has its widthZeroIfInvisible=false. See source code for details
+    of layout.</P>
+    Notice the following behaviour:
+    <UL>
+    <LI>'Three' moves left when 'Two' is set invisible. This is because the width of
+    'Two' is set to zero when it is invisible.</LI>
+    <LI>'Six' does not move when 'Five' is set invisible. This is because the width of
+    'Five' is unchanged when it is invisible.</LI>
+    </UL>
+    <P>For more sophisticated behaviour when components are made invisible, it is possible
+    to modify the constraints at runtime (see Ratio Trigger example)</P>
+
+  </BODY>
+</HTML>

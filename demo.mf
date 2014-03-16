@@ -1,0 +1,3 @@
+Main-Class: com.zookitec.layout.demo.ExplicitLayoutDemo
+Class-Path: elall.jar
+

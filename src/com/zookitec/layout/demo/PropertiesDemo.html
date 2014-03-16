@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD/ HTML 3.2 Final//EN">
+<HTML>
+
+  <HEAD>
+    <TITLE>Blank</TITLE>
+  </HEAD>
+
+  <BODY>
+    Demonstrates how to use <b>ExplicitLayout</b> to:
+    <UL>
+    <LI>Load layout constraints from a properties file</LI>
+    <LI>Define several variant layouts and switch between them at runtime</LI>
+    <LI>Edit constraints without recompiling</LI>
+    </UL>
+    Note: If you want to define layout variants without using a properties file, see Ratio Trigger example.
+    <P>Possible uses of these features include:</P>
+    <UL>
+    <LI>Creating variant layouts for different locales</LI>
+    <LI>Creating variant layouts for different user preferences or abilities</LI>
+    <LI>Creating variant layouts depending on component visibility</LI>
+    <LI>Creating variant layouts based on container width / height ratio</LI>
+    <LI>Dynamically generating layouts and storing them in a human readable format</LI>
+    <LI>Extending API to define your layout using XML or a database</LI>
+    <LI>Using the same layout definition for different containers
+    (e.g. container's with same or similar layouts, but unrelated in
+    the class hierarchy and possibly contain different components) </LI>
+    </UL>
+
+    <b>Instructions</b>
+
+    <P>The "layout.properties" file used in this example defines three layout variants:
+    default (null), "middle" and "right".  To switch between variants,
+    type the variant name (or blank for default) in the text field provided
+    in the Constraints Editor and hit [enter] or click <b>Layout</b></P>
+
+    <P>You can also edit the constraints in the Constraints Editor.
+    A constraints attribute key has the format
+    <i>component_name</i>.<i>attribute</i> for the default variant or
+    <i>component_name</i>.<i>variant</i>.<i>attribute</i> for the specified variant.
+    The constraints attribute values are specified using the
+    ExplicitLayout API and a syntax similar to Java language.
+    The main differences include:</P>
+    <UL>
+    <LI>Components are identified using the name specified in the
+    corresponding ExplicitConstraints constructor</LI>
+    <LI>Arrays of components or expressions are specified using the syntax
+    {a, b, c} rather than new Component[]{a,b,c} or new Expression[]{a,b,c}</LI>
+    <LI>Some of the properties may define values for use in other properties.
+    To include the value of one property in the value of another, enclose the key
+    in angle brackets.</LI>
+    </UL>
+    <P>For further details, see API documentaion.</P>
+    <P>Keys are sorted alphabetically. To insert a new key, use the empty row at the
+    bottom of the table. To delete a key, delete the text in the corresponding cell and
+    hit [Enter]. To update the layout using your modified properties, enter the variant in
+    the text field provided and click <b>Layout</b> in Constraints Editor</P>
+
+    <P>There are two common types of error you may get when editing constraints:</P>
+    <UL>
+    <LI>Invalid Constraints Attribute - Usually an syntax error in the attribute definition.</LI>
+    <LI>Illegal State - Usually the result of an attribute being defined in terms of itself.</LI>
+    </UL>
+    <P>To disgard changes and reload the layout.properties file, click <b>Reload</b> in
+    Constraints Editor</P>
+
+  </BODY>
+</HTML>

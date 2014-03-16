@@ -1,0 +1,272 @@
+<html>
+<head>
+  <title>ExplicitLayout Programmer's Guide - Chapter 4</title>
+
+  <link rel="STYLESHEET" type="text/css" href="guide.css" title="Style">
+</head>
+ <body>
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="30%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="ch3.html">Previous</A>]
+        [<A HREF="ch5.html">Next</A>]
+        </TD>
+        <TD align="center"></TD>        
+        <TD WIDTH="30%" ALIGN=RIGHT VALIGN=TOP><EM><B>ExplicitLayout<BR>3.0</B></EM></TD>
+      </TR>
+    </TABLE>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+    <H1>Specifying a component's location</H1>
+    <P>The previous section introduces the idea of specifying the location of a component using
+    expressions for the x and y coordinates in an ExplicitConstraints object.
+    This section goes further to describe various ways to create these x and y expressions.</P>
+    <DIV class="indent1"><UL>
+      <LI><A href="#container">Specifying a location relative to the container</A></LI>
+      <LI><A href="#component">Specifying a location relative to another component</A></LI>
+      <LI><A href="#group">Specifying a location relative to a group of components</A></LI>
+      <LI><A href="#grid">Specifying a location on a grid</A></LI>
+      <LI><A href="#origin">Specifying the component origin</A></LI>
+      <LI><A href="#geom">Specifying a location on a line or ellipse (professional)</A></LI>
+    </UL></DIV>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+
+    <A name="container"></A>
+    <H2>Specifying a location relative to the container</H2>
+    <P>The ContainerEF class has methods that return expressions
+    for various attributes of the container being laid out. These expressions
+    can be used as part of expressions for a component's x and y coordinate to
+    specify a location relative to the container.</P>
+
+    <H3>Specifying a location relative to an edge of the container</H3>
+    <P>The ContainerEF class can be used to create expressions for the top, bottom, left and right
+    of the container as illustrated in figure 4.1. Notice how these expressions take into account
+    the component insets. A component can be located a distance from a container edge by adding
+    a constant or variable expression to one of the container edge expressions using the MathEF class.</P>
+    <DIV class="indent1">
+    <IMG SRC="images/container_fixed.gif" ALT=" " WIDTH=286 HEIGHT=202><BR>
+    Figure 4.1 : Expressions for container top, bottom, left and right
+    </DIV>
+    <P>
+    The following code creates a constraints object to locate a component 20 pixels
+    from the left and 40 pixels from the top of the container. In the code below, "this" 
+    is a reference to the container being layed out.
+    </P>
+    <P class="codequote"><CODE>
+    ExplicitConstraints ec = new ExplicitConstraints(c);<BR>
+    ec.setX(MathEF.add(ContainerEF.left(this), 20));<BR>
+    ec.setY(MathEF.add(ContainerEF.top(this), 40));<BR>
+    </CODE></P>
+    <P>
+    You could also add a variable expression to an edge of the container instead of a constant.
+    For example, you could have an expression for a gap that varies with the container
+    width. The following code is similar to the previous example, but a variable gap expression is added
+    instead of a constant. The expression is a fraction of the container's width bound by a minimum and
+    maximum. The expression value is equal to 1 if width < 100, 6 if width > 600 and width * 0.01 otherwise.
+    </P>
+    <P class="codequote"><CODE>
+    Expression gap = MathEF.bound(1, ContainerEF.widthFraction(this, 0.01), 6);<BR>
+    ExplicitConstraints ec = new ExplicitConstraints(c);<BR>
+    ec.setX(MathEF.add(ContainerEF.left(this), gap));<BR>
+    ec.setY(MathEF.add(ContainerEF.top(this), 40));<BR>
+    </CODE></P>
+
+
+    <H3>Specifying a location at a fraction of the container's width or height</H3>
+    <P>The ContainerEF class can be used to create expressions for a fraction of the
+    container's width or height as illustrated in figure 4.2. Notice how these expressions take into account
+    the container insets.
+    </P>
+    <DIV class="indent1">
+    <IMG SRC="images/container_fraction.gif" ALT=" " WIDTH=286 HEIGHT=202><BR>
+    Figure 4.2 : Expressions for container xFraction and yFraction
+    </DIV>
+
+    <P>The following code creates a constraints object to locate a component such that
+    its left side is at the center of the container and its top is at the top of the container.</P>
+
+    <P class="codequote"><CODE>
+    ExplicitConstraints ec = new ExplicitConstraints(c);<BR>
+    ec.setX(ContainerEF.xFraction(this, 0.5));<BR>
+    </CODE></P>
+
+
+    <A name="component"></A>
+    <H2>Specifying a location relative to another component</H2>
+    <P>The ComponentEF class can be used to create expressions for x and y coordinates
+    relative to another component as illustrated in figure 4.3. This can be used to
+    locate a component above, below, to the left or to the right of another component.
+    The MathEF class can be used to add or subtract expression to create gaps between
+    components.
+    </P>
+    <DIV class="indent1">
+    <IMG SRC="images/component_relative.gif" ALT=" " WIDTH=286 HEIGHT=202><BR>
+    Figure 4.3 : Expressions for locations relative to a component.
+    </DIV>
+    <P>The following code locates the cancelButton 10 pixels to the right and aligned with the
+    top of the okButton.
+    </P>
+    <P class="codequote"><CODE>
+    ExplicitConstraints ec = new ExplicitConstraints(cancelButton);<BR>
+    ec.setX(MathEF.add(ComponentEF.right(okButton), 10));<BR>
+    ec.setY(ComponentEF.top(okButton));<BR>
+    </CODE></P>
+
+    <A name="group"></A>
+    <H2>Specifying a location relative to a group of components</H2>
+    <P>The GroupEF class can be used to create expressions for x and y coordinates
+    relative to a group of components as illustrated in figure 4.4. A group
+    is defined using an array of components. Two groups are shown in the diagram,
+    g1 and g2. The group is effectively treated as a single component. The expression
+    created by GroupEF.right(g1) refers to the maximum right side x coordinate of g1[0] and g1[1].
+    The expression created by GroupEF.bottom(g2) refers to the maximum bottom y coordinate of g2[0] and g2[1]
+    </P>
+    <P>This is useful because you may not know which component is biggest at design time. For example, in an
+    application that supports a multilingual user interface, a label may be longer than another in one language
+    but shorter in a different language.
+    </P>
+    <DIV class="indent1">
+    <IMG SRC="images/group_relative.gif" ALT=" " WIDTH=286 HEIGHT=202><BR>
+    Figure 4.4 : Expressions for locations relative to a component group
+    </DIV>
+    <P>The following code creates a constraints object to locate component c, 10 pixels to the right of
+    group g1 and aligned with the top of the group. Component c is aligned with the top of the group rather than with the
+    top component in the group so that a change to the vertical order of components in the group
+    does not affect its location.</P>
+    <P class="codequote"><CODE>
+    Component [] g1 = {label1, label2};<BR>
+    ExplicitConstraints ec = new ExplicitConstraints(c);<BR>
+    ec.setX(MathEF.add(GroupEF.right(g1), 10));<BR>
+    ec.setY(GroupEF.top(g1));<BR>
+    </CODE></P>
+
+    <P>
+    Some changes and several additional methods have been added to GroupEF in ExplicitLayout 2.0
+    See API docs for details.
+    </P>
+
+
+    <A name="grid"></A>
+    <H2>Specifying a location on a grid</H2>
+    <P>The ContainerEF class has two methods, gridX and gridY, that create expressions for the top left
+    coordinate of a grid cell as illustrated in figure 4.5. The grid origin is at the top left corner
+    of the container.  The gridX method takes a zero-based column index and the cell width. The grid Y method
+    takes a zero-based row index and the cell height. Note that the grid doesn't actually exist. The methods
+    can be called with different cell width and cell height parameters within the same container
+    to give the effect of multiple overlapping grids of different sizes. This functionality contributes
+    to making ExplicitLayout much more flexible than the standard GridLayout or GridBagLayout.
+    </P>
+    <DIV class="indent1">
+    <IMG SRC="images/grid_relative.gif" ALT=" " WIDTH=286 HEIGHT=202><BR>
+    Figure 4.5 : Expressions for locations on a grid
+    </DIV>
+
+    <A name="origin"></A>
+    <H2>Specifying the component origin</H2>
+    <P>So far, the location of a component has been specified using expressions for the
+    coordinates of the top left corner of the component. This is what you might expect
+    because the <CODE>Compomnent.setLocation(int&nbsp;x,&nbsp;int&nbsp;y)</CODE> method
+    also specifies the coordinates of the top left corner of the component. There are many
+    situations where it is more convenient to specify coordinates for one of the other corners
+    or the center of the component. This is useful where a component is right, center or bottom
+    aligned with other components or within the container.</P>
+
+    <P>ExplicitLayout actually goes one step further by defining a component origin as
+    fractions of the width and height. This allows the origin to be positioned anywhere
+    on the component. The x and y expressions in the ExplicitConstraints object
+    specify the location of the component's origin within the container.
+    </P>
+    <P>The ExplicitContraints class defines the following static constants for
+    specifying common origin positions, although you may prefer to specify the
+    values directly:</P>
+    <DIV class="indent1">
+    <TABLE WIDTH=300 CELLPADDING=2 CELLSPACING=2 BORDER=2>
+      <TR>
+        <TH BGCOLOR="#9999FF" WIDTH="30%" ALIGN="LEFT" VALIGN="TOP">Attribute</TH>
+        <TH BGCOLOR="#9999FF" WIDTH="20%" ALIGN="LEFT" VALIGN="TOP">Value</TH>
+        <TH BGCOLOR="#9999FF" WIDTH="50%" ALIGN="LEFT" VALIGN="TOP">Used for</TH>
+      </TR>
+      <TR>
+        <TD WIDTH="30%" ALIGN="LEFT" VALIGN="TOP">LEFT</TD>
+        <TD WIDTH="20%" ALIGN="LEFT" VALIGN="TOP">0.0</TD>
+        <TD WIDTH="50%" ALIGN="LEFT" VALIGN="TOP">originX</TD>
+      </TR>
+      <TR>
+        <TD WIDTH="30%" ALIGN="LEFT" VALIGN="TOP">RIGHT</TD>
+        <TD WIDTH="20%" ALIGN="LEFT" VALIGN="TOP">1.0</TD>
+        <TD WIDTH="50%" ALIGN="LEFT" VALIGN="TOP">originX</TD>
+      </TR>
+      <TR>
+        <TD WIDTH="30%" ALIGN="LEFT" VALIGN="TOP">TOP</TD>
+        <TD WIDTH="20%" ALIGN="LEFT" VALIGN="TOP">0.0</TD>
+        <TD WIDTH="50%" ALIGN="LEFT" VALIGN="TOP">originY</TD>
+      </TR>
+      <TR>
+        <TD WIDTH="30%" ALIGN="LEFT" VALIGN="TOP">BOTTOM</TD>
+        <TD WIDTH="20%" ALIGN="LEFT" VALIGN="TOP">1.0</TD>
+        <TD WIDTH="50%" ALIGN="LEFT" VALIGN="TOP">originY</TD>
+      </TR>
+      <TR>
+        <TD WIDTH="30%" ALIGN="LEFT" VALIGN="TOP">CENTER</TD>
+        <TD WIDTH="20%" ALIGN="LEFT" VALIGN="TOP">0.5</TD>
+        <TD WIDTH="50%" ALIGN="LEFT" VALIGN="TOP">originX or originY</TD>
+      </TR>
+    </TABLE>
+    Table 4.6 : ExplicitConstraints component origin constants
+    </DIV>
+
+    <P>
+    The following code creates a constraints object for component c,
+    to center align it horizontally and bottom align it vertically, as
+    illustrated in figure 4.7.
+    </P>
+    <P class="codequote"><CODE>
+    ExplicitConstraints ec = new ExplicitConstraints(c);<BR>
+    ec.setOriginX(ExplicitConstraints.CENTER);<BR>
+    ec.setOriginY(ExplicitConstraints.BOTTOM);<BR>
+    ec.setX(ContainerEF.xFraction(0.5));<BR>
+    ec.setY(ContainerEF.bottom());<BR>
+    </CODE></P>
+    <DIV class="indent1">
+    <IMG SRC="images/center_bottom.gif" ALT=" " WIDTH="125" HEIGHT="94"><BR>
+    Figure 4.7 : Component aligned bottom center
+    </DIV>
+
+
+    <A name="geom"></A>
+    <H2>Specifying a location on a line or ellipse</H2>
+    <P>These features are only available in ExplicitLayout 2.0 Professional.</P>
+    <P>The GeomEF expression factory contains methods to create expressions
+      for points on a line or ellipse. These method take expressions for line
+      end points or ellipse center and major and minor radii. A parameter in the
+      range 0.0 to 1.0 is used to define a point on the line.
+      An angle in the range 0 to 360 degrees is used to define a point on the ellipse.</P>
+
+      <P>These features extends ExplicitLayout's ability to lay out less 'rectangular'
+      GUIs (e.g. containing non-rectangular, semi transparent or overlapping components). </P>
+
+      <DIV class="indent1">
+    <IMG SRC="images/geom.gif" ALT=" " WIDTH="363" HEIGHT="230"><BR>
+    Figure 4.7 : Components on a line and ellipse using GeomEF
+    </DIV>
+
+
+    <P>&nbsp</P>
+    <IMG SRC="images/bar.gif" ALT=" " WIDTH="100%" HEIGHT="5"><BR>
+    <TABLE WIDTH="100%" BORDER=0>
+      <TR>
+        <TD WIDTH="35%" ALIGN=LEFT VALIGN=TOP>
+        [<A HREF="index.html">Home</A>]
+        [<A HREF="toc.html">Contents</A>]
+        [<A HREF="../api/index.html" TARGET="_new">Javadoc</A>]<BR>
+        [<A HREF="ch3.html">Previous</A>]
+        [<A HREF="ch5.html">Next</A>]
+        </TD>
+        <TD WIDTH="65%" ALIGN=RIGHT VALIGN=TOP>Copyright&nbsp;&copy;&nbsp;2001 Zooki&nbsp;Technologies. All&nbsp;rights&nbsp;reserved.</TD>
+      </TR>
+    </TABLE>
+</body>
+</html>

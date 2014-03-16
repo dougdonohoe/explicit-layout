@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD/ HTML 3.2 Final//EN">
+<HTML>
+
+  <HEAD>
+    <TITLE>Blank</TITLE>
+  </HEAD>
+
+  <BODY>
+    Demonstrates how to use <b>ExplicitLayout</b> to:
+    <UL>
+    <LI>Modify constraints at runtime</LI>
+    <LI>Switch between 'normal' and 'wide' variant constraints
+        depending on the container width / height ratio.</LI>
+    </UL>
+    For some layouts, it may be difficult to define a single set of constraints
+    that work well for all container sizes. This example makes use of the LayoutListener
+    interface to switch constraints so that the buttons are on the right when the
+    container is very wide and below the text area otherwise. The idea is to maximise
+    the text area width when the container is tall and narrow and maximise its height when the
+    container is short and wide.
+    You may also want to switch constraints at runtime for other reasons, such as when some components are set
+    invisible (however, in this case, manipulating the width and height zero-if-invisible flags
+    may be sufficient, see Component Visibility example).
+  </BODY>
+</HTML>
