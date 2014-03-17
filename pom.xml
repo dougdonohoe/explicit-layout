@@ -3,6 +3,26 @@
 	<groupId>com.zookitec</groupId>
 	<artifactId>explicit</artifactId>
 	<version>3.0</version>
+	<prerequisites>
+		<maven>3.0+</maven>
+	</prerequisites>
+	
+	<inceptionYear>2013</inceptionYear>
+
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!--maven variable which points to your local repository -->
+		<internal.repo.path>file:///home/hbui/mvn-repo/</internal.repo.path>
+	</properties>
+	
+	<distributionManagement>
+		<repository>
+			<id>internal.repo</id>
+			<name>Internal Repository</name>
+			<url>${internal.repo.path}</url>
+		</repository>
+	</distributionManagement>
 	<build>
 		<plugins>
 			<plugin>
@@ -23,9 +43,9 @@
 						<id>compile</id>
 						<phase>compile</phase>
 						<configuration>
-							<tasks>
+							<target>
 								<ant antfile="${basedir}/build.xml" target="compile"/>
-							</tasks>
+							</target>
 						</configuration>
 						<goals>
 							<goal>run</goal>
@@ -35,12 +55,12 @@
 						<id>dist</id>
 						<phase>prepare-package</phase>
 						<configuration>
-							<tasks>
+							<target>
 								<mkdir dir="${basedir}/target/classes"/>
 								<copy todir="${basedir}/target/classes" >
         							<fileset dir="${basedir}/build" excludes="**/*.java,**/*.html"/>
     							</copy>
-							</tasks>
+							</target>
 						</configuration>
 						<goals>
 							<goal>run</goal>
@@ -50,9 +70,9 @@
 						<id>clean</id>
 						<phase>pre-clean</phase>
 						<configuration>
-							<tasks>
+							<target>
 								<ant antfile="${basedir}/build.xml" target="clean"/>
-							</tasks>
+							</target>
 							
 						</configuration>
 						<goals>
